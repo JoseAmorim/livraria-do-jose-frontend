@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react'
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import './styles/global'
+
+import { Login } from './screens/Login/Login'
+import { Dashboard } from './screens/Dashboard/Dashboard'
+import { CreateBook } from './screens/CreateBook/CreateBook'
+import { Redirect } from 'react-router'
 
 function App() {
+  const user = localStorage.getItem('user')
+
+  useEffect(() => {}, [localStorage.getItem('user')])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <Route path="/login" exact>
+        <Login />
+      </Route>
+      {user ? (
+        <>
+          <Route path="/" exact>
+            <Dashboard />
+          </Route>
+          <Route path="/adicionar-livro" exact>
+            <CreateBook />
+          </Route>
+        </>
+      ) : (
+        <Redirect to="/login" />
+      )}
+    </Router>
+  )
 }
 
-export default App;
+export default App
